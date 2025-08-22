@@ -1,9 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
-import json
-import hashlib
+from datetime import datetime
 
 # Configuração inicial da página
 st.set_page_config(
@@ -13,36 +11,22 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Sistema de autenticação melhorado
+# Sistema de autenticação simplificado
 def check_password():
-    """Verifica se o usuário inseriu a senha correta com proteção adicional"""
+    """Verifica se o usuário inseriu a senha correta"""
     if "authenticated" not in st.session_state:
         st.session_state.authenticated = False
-        st.session_state.login_attempts = 0
-        st.session_state.last_attempt = None
     
     if not st.session_state.authenticated:
         st.title("🔒 Acesso Restrito - HS Studio")
-        
-        # Proteção contra força bruta
-        if (st.session_state.last_attempt and 
-            (datetime.now() - st.session_state.last_attempt) < timedelta(minutes=1) and
-            st.session_state.login_attempts >= 3):
-            st.error("Muitas tentativas falhas. Tente novamente em 1 minuto.")
-            st.stop()
-            
         password = st.text_input("Digite a senha para acessar o aplicativo:", type="password")
         
         if st.button("Acessar"):
-            st.session_state.last_attempt = datetime.now()
-            # Usar hash para maior segurança
-            if hashlib.sha256(password.encode()).hexdigest() == "c4d8d68d6f7e72cba2c6d6a5d789e2e42e83b931c4f64c6c8e1a9f0d2b5c6d7a":  # Hash de "Gabriel"
+            if password == "Gabriel":  # Senha direta, sem hash
                 st.session_state.authenticated = True
-                st.session_state.login_attempts = 0
                 st.success("Acesso concedido!")
                 st.rerun()
             else:
-                st.session_state.login_attempts += 1
                 st.error("Senha incorreta. Tente novamente.")
         
         st.stop()
@@ -52,6 +36,10 @@ def check_password():
 if not check_password():
     st.stop()
 
+# O RESTANTE DO CÓDIGO PERMANECE EXATAMENTE COMO ESTAVA NO SEU CÓDIGO ORIGINAL
+# (incluindo a inicialização do estado da sessão, dicionário de padrões, funções auxiliares, etc.)
+
+# [TODO: Aqui viria todo o restante do seu código original]
 # Inicialização do estado da sessão com mais parâmetros
 if 'history' not in st.session_state:
     st.session_state.history = []
